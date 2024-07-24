@@ -1,0 +1,32 @@
+services:
+  postgres:
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    image: postgres:16.3-alpine
+    environment:
+      POSTGRES_USER: "${DB_USER}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${DB_USER} -d ${DB_NAME}'"]
+      interval: 5s
+      timeout: 60s
+      retries: 5
+  app:
+    image: petmanagerapi
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: development
+      PNPM_HOME: "/pnpm"
+      PATH: "$PNPM_HOME:$PATH"
+    ports:
+      - "${NODE_PORT}:${NODE_PORT}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+volumes:
+  pgdata:
