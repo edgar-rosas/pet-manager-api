@@ -15,7 +15,6 @@ services:
       timeout: 60s
       retries: 5
   app:
-    image: petmanagerapi
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -23,8 +22,14 @@ services:
       NODE_ENV: development
       PNPM_HOME: "/pnpm"
       PATH: "$PNPM_HOME:$PATH"
+      PORT: "${PORT}"
+      POSTGRES_DB: "${DB_NAME}"
+      POSTGRES_USER: "${DB_USER}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_PORT: "${DB_PORT}"
+      POSTGRES_HOST: "postgres"
     ports:
-      - "${NODE_PORT}:${NODE_PORT}"
+      - "${PORT}:${PORT}"
     depends_on:
       postgres:
         condition: service_healthy
