@@ -2,6 +2,7 @@ import {
   Collection,
   Entity,
   ManyToMany,
+  OptionalProps,
   PrimaryKey,
   Property,
   Unique,
@@ -11,6 +12,17 @@ import { PetOwner } from "../common/pet-owner.entity.js";
 
 @Entity()
 export class Owner {
+  [OptionalProps]?: "createdAt" | "updatedAt";
+
+  constructor(ownerParams: Owner) {
+    this.firstName = ownerParams.firstName;
+    this.lastName = ownerParams.lastName;
+    this.email = ownerParams.email;
+    this.pets = ownerParams.pets;
+    this.createdAt = ownerParams.createdAt;
+    this.updatedAt = ownerParams.updatedAt;
+  }
+
   @PrimaryKey({ type: "uuid", defaultRaw: "gen_random_uuid()" })
   uuid!: string;
 
@@ -23,9 +35,6 @@ export class Owner {
   @Unique({ name: "owner_email_unique" })
   @Property()
   email!: string;
-
-  @Property()
-  password!: string;
 
   @ManyToMany({ entity: () => Pet, pivotEntity: () => PetOwner })
   pets = new Collection<Pet>(this);
