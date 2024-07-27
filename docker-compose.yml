@@ -10,7 +10,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${DB_USER} -d ${DB_NAME}'"]
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -U ${DB_USER} -d ${DB_NAME}'" ]
       interval: 5s
       timeout: 60s
       retries: 5
@@ -30,6 +30,12 @@ services:
       POSTGRES_HOST: "postgres"
     ports:
       - "${PORT}:${PORT}"
+      - "9229:9229" # Debugging port
+    develop:
+      watch:
+        - action: rebuild
+          path: ./src
+          target: /usr/src/app/src
     depends_on:
       postgres:
         condition: service_healthy
