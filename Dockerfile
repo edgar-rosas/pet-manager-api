@@ -11,4 +11,4 @@ COPY . .
 EXPOSE 3000
 RUN chown -R node ./
 USER node
-ENTRYPOINT ["dumb-init", "node", "--inspect-brk=0.0.0.0", "--no-warnings=ExperimentalWarning", "--loader", "ts-node/esm", "src/server.ts" ]
+ENTRYPOINT ["dumb-init", "node", "--no-warnings=ExperimentalWarning", "--loader", "ts-node/esm", "src/server.ts" ]
