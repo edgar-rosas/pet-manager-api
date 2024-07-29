@@ -1,3 +1,4 @@
+import { Migrator } from "@mikro-orm/migrations";
 import { defineConfig, LoadStrategy } from "@mikro-orm/postgresql";
 import { TsMorphMetadataProvider } from "@mikro-orm/reflection";
 import { SeedManager } from "@mikro-orm/seeder";
@@ -8,7 +9,7 @@ export default defineConfig({
   port: Number(process.env.POSTGRES_PORT) ?? 5432,
   user: process.env.POSTGRES_USER ?? "postgres",
   password: process.env.POSTGRES_PASSWORD ?? "password",
-  extensions: [SeedManager],
+  extensions: [SeedManager, Migrator],
   entities: ["dist/**/*.entity.js"],
   entitiesTs: ["src/**/*.entity.ts"],
   metadataProvider: TsMorphMetadataProvider,
